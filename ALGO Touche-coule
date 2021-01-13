@@ -1,0 +1,160 @@
+ALGO Touche-coule
+
+//BUT realiser un jeu de touche coule fonctionnel
+//ENTREE J1 pose 5 bateau sur le plateau
+//SORTIE J2 tente de les couler avant que ses point de vie soit a 0
+
+TYPE tableau = TABLEAU[1..10,1..10] de CARACTERE
+
+VAR plateauJ1 : TABLEAU
+	plateauJ2 : TABLEAU
+	i,j, horiz, verti, pvJ2 : ENTIER
+	posit : CHAINE
+
+PROCEDURE Init(VAR plateau : TABLEAU)
+
+	DEBUT
+
+		POUR i DE 1 A 10 FAIRE
+
+			POUR j DE 1 A 10 FAIRE
+				plateau[i,j]<--'O'
+			FINPOUR
+			
+		FINPOUR
+
+	FIN
+
+
+PROCEDURE Affich(VAR plateau : TABLEAU)
+
+	VAR i,j : ENTIER
+
+	DEBUT
+
+		COULEURBACKGROUND(bleu)
+		ECRIRE " ABCDEFGHIJ"
+
+		POUR i DE 1 A 10 FAIRE
+			ECRIRE(i-1)
+
+			POUR j DE 1 A 10 FAIRE
+				SI plateau[i,j]='O' ALORS
+					COULEURTEXTE(blanc)
+				SINON
+					COULEURTEXTE(noir)
+				FINSI
+				ECRIRE(plateau[i,j])
+				COULEURTEXTE(blanc)
+			FINPOUR
+
+		FINPOUR
+
+	FIN
+
+
+PROCEDURE BateauDepart(VAR plateau : TABLEAU)
+	
+	DEBUT
+		ECRIRE"Vous devez placer 1 porte-avion de 5 cases, 1 croiseur de 4 cases, 2 contre-torpilleurs de 3 cases et 1 tropilleur de 2 cases."
+		ECRIRE"Veuillez selectionner une case afin de poser vos bateaux. Ils ne peuvent pas se toucher ni etre mis en diagonale."
+		LIRE(posit)
+
+		CAS posit[1] PARMIS
+			CAS1:'A' : verti<--1 
+			CAS2:'B' : verti<--2 
+			CAS3:'C' : verti<--3 
+			CAS4:'D' : verti<--4 
+			CAS5:'E' : verti<--5 
+			CAS6:'F' : verti<--6 
+			CAS7:'G' : verti<--7 
+			CAS8:'H' : verti<--8 
+			CAS9:'I' : verti<--9 
+			CAS10:'J' : verti<--10 
+		FINCASPARMIS
+
+		CAS posit[2] PARMIS
+			CAS1:'0' : verti<--1 
+			CAS2:'1' : verti<--2 
+			CAS3:'2' : verti<--3 
+			CAS4:'3' : verti<--4 
+			CAS5:'4' : verti<--5 
+			CAS6:'5' : verti<--6 
+			CAS7:'6' : verti<--7 
+			CAS8:'7' : verti<--8 
+			CAS9:'8' : verti<--9 
+			CAS10:'9' : verti<--10 
+		FINCASPARMIS
+
+		plateau[horiz, verti]<--'X'
+		Affich(plateau)
+	FIN
+
+
+PROCEDURE Feu(VAR plateau : TABLEAU)
+	
+	DEBUT
+		ECRIRE"Veuillez selectionner une case sur laquelle tirer."
+		LIRE(posit)
+
+		CAS posit[1] PARMIS
+			CAS1:'A' : verti<--1 
+			CAS2:'B' : verti<--2 
+			CAS3:'C' : verti<--3 
+			CAS4:'D' : verti<--4 
+			CAS5:'E' : verti<--5 
+			CAS6:'F' : verti<--6 
+			CAS7:'G' : verti<--7 
+			CAS8:'H' : verti<--8 
+			CAS9:'I' : verti<--9 
+			CAS10:'J' : verti<--10 
+		FINCASPARMIS
+
+		CAS posit[2] PARMIS
+			CAS1:'0' : verti<--1 
+			CAS2:'1' : verti<--2 
+			CAS3:'2' : verti<--3 
+			CAS4:'3' : verti<--4 
+			CAS5:'4' : verti<--5 
+			CAS6:'5' : verti<--6 
+			CAS7:'6' : verti<--7 
+			CAS8:'7' : verti<--8 
+			CAS9:'8' : verti<--9 
+			CAS10:'9' : verti<--10 
+		FINCASPARMIS
+
+		SI plateauselct[horiz,verti]='X' ALORS
+			ECRIRE"Touche !"
+			plateau[horiz, verti]='*'
+		SINON
+			pvJ2 <-- pvJ2-1
+			ECRIRE"Plouf !"
+			plateau[horiz, verti]='X'
+		FINSI
+
+		Affich(plateau)
+
+	FIN
+
+
+DEBUT
+
+	pvJ2 <-- 10
+
+	Init(plateauJ1)
+	Init(plateauJ2)
+
+	POUR i DE 1 A 17
+		BateauDepart(plateauJ1)
+	FINPOUR
+
+	TANTQUE pvJ2 > 0 FAIRE
+		ECRIRE"Il vous reste " +pvJ2+ " essai(s) pour couler les bateaux ennemis."
+		Feu(plateauJ2, plateauJ1)
+	FINTANTQUE
+
+	SI pvJ2 = 0 ALORS
+		ECRIRE"Vous avez perdu ..."
+	FINSI
+
+FIN.
